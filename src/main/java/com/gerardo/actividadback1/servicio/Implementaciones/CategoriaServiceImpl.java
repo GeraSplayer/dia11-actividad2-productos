@@ -19,8 +19,13 @@ import org.springframework.util.ReflectionUtils;
 public class CategoriaServiceImpl implements CategoriaService{
     @Autowired
     CategoriaRepository repository;
-
-    @Override
+    
+    public CategoriaServiceImpl(CategoriaRepository repository) {
+		super();
+		this.repository = repository;
+	}
+    
+	@Override
     public ResponseEntity<?> obtenerTodos() {
         try {
             ArrayList<Categoria> data = (ArrayList<Categoria>) repository.findAll();
@@ -85,7 +90,7 @@ public class CategoriaServiceImpl implements CategoriaService{
             Categoria data = repository.findById(id).orElse(null);
             if(data != null) {
                 fields.forEach((key, value) -> {
-                    Field f = ReflectionUtils.findField(Producto.class, (String) key);
+                    Field f = ReflectionUtils.findField(Categoria.class, (String) key);
                     if (f != null) {
                         f.setAccessible(true);
                         ReflectionUtils.setField(f, data, value);

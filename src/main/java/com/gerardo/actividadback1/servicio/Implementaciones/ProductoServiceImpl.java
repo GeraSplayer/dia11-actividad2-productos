@@ -19,8 +19,13 @@ public class ProductoServiceImpl implements ProductoService{
 
     @Autowired
     ProductoRepository repository;
-
-    @Override
+    
+    public ProductoServiceImpl(ProductoRepository repository) {
+		super();
+		this.repository = repository;
+	}
+    
+	@Override
     public ResponseEntity<?> obtenerTodos() {
         try {
             ArrayList<Producto> data = (ArrayList<Producto>) repository.findAll();
@@ -35,7 +40,7 @@ public class ProductoServiceImpl implements ProductoService{
     public ResponseEntity<?> obtenerById(Long id) {
         try {
             if(id != null) {
-                Producto data = repository.findById(id).orElse(null);
+                Producto data = (repository.findById(id).orElse(null));
                 if(data != null)
                     return new ResponseEntity<>(data, HttpStatus.OK);
                 else
@@ -83,7 +88,7 @@ public class ProductoServiceImpl implements ProductoService{
     public ResponseEntity<?> actualizarPacial(Long id, Map<Object, Object> fields) {
         try {
             Producto data = repository.findById(id).orElse(null);
-            if(data != null) {
+            if(data != null ) {
                 fields.forEach((key, value) -> {
                     Field f = ReflectionUtils.findField(Producto.class, (String) key);
                     if (f != null) {
